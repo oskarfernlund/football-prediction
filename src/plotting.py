@@ -7,6 +7,7 @@ Some useful plotting functions.
 #  IMPORTS AND DEPENDENCIES
 # =============================================================================
 
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 plt.style.use("seaborn-deep")
@@ -23,7 +24,7 @@ def plot_feature_distributions(
     bins: int = 100,
     figsize: HeightAndWidth = DEFAULT_FIG_SIZE,
 ) -> plt.figure:
-    """ Plot a histograms of continuous features and bar charts of discrete features.
+    """ Plot histograms of continuous features and bar charts of discrete features.
     
     Args:
         df (pd.DataFrame) : Training DataFrame containing features and labels
@@ -64,27 +65,29 @@ def plot_feature_distributions(
     return fig
 
 
-# def plot_correlations(
-#     x1: ArrayLike,
-#     x2: ArrayLike,
-#     figsize: HeightAndWidth = DEFAULT_FIG_SIZE
-# ) -> plt.figure:
-#     """ Plot samples of two variables against eachother to assess correlation.
+def plot_elbos(
+    elbos: list,
+    colour: str = "C0",
+    figsize: HeightAndWidth = DEFAULT_FIG_SIZE
+) -> plt.figure:
+    """ Plot ELBO vs. number of training iterations.
     
-#     Args:
-#         x1 (ArrayLike) : Samples of random variable 1
-#         x2 (ArrayLike) : Samples of random variable 2
-#         figsize (HeightAndWidth) : Figure size
+    Args:
+        elbos (list) : List of ELBO values corresponding to each training iteration
+        colour (str) : Colour of the curve to plot
+        figsize (HeightAndWidth) : Figure size
 
-#     Returns:
-#         fig (plt.figure) : The generated figure object
-#     """
-#     fig, ax = plt.subplots(1, 1, figsize=figsize)
-#     ax.scatter(x1, x2, facecolor="C0", edgecolor="w", s=20)
-#     ax.set_xlabel("x1")
-#     ax.set_ylabel("y1")
+    Returns:
+        fig (plt.figure) : The generated figure object
+    """
+    fig, ax = plt.subplots(1, 1, figsize=figsize)
 
-#     return fig
+    # Plot ELBO's
+    ax.plot(np.arange(len(elbos)), elbos, c=colour)
+    ax.set_xlabel("iteration")
+    ax.set_ylabel("ELBO")
+    
+    return fig
 
 
 

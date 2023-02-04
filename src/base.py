@@ -26,4 +26,5 @@ DEFAULT_FIG_SIZE = (7, 4)
 
 NumLike = Union[int, float]
 ArrayLike = Union[list, np.array, pd.Series, tf.Tensor]
+RegressionData = Tuple[ArrayLike, ArrayLike]
 HeightAndWidth = Tuple[NumLike, NumLike]
