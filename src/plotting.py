@@ -21,7 +21,7 @@ from src.base import DEFAULT_FIG_SIZE, ArrayLike, HeightAndWidth
 
 def plot_feature_distributions(
     df: pd.DataFrame,
-    bins: int = 100,
+    bins: int = 50,
     figsize: HeightAndWidth = DEFAULT_FIG_SIZE,
 ) -> plt.figure:
     """ Plot histograms of continuous features and bar charts of discrete features.
@@ -65,8 +65,42 @@ def plot_feature_distributions(
     return fig
 
 
+def plot_targets_2D(df: pd.DataFrame, figsize: HeightAndWidth = DEFAULT_FIG_SIZE,):
+    """ Plot 2D scatterplots of the targets ft_home and ft_away (0-5 goals).
+    
+    Args:
+        df (pd.DataFrame) : Training DataFrame containing features and labels
+        figsize (HeightAndWidth) : Figure size
+
+    Returns:
+        fig (plt.figure) : The generated figure object """
+
+    fig, axes = plt.subplots(1, 2, figsize=figsize)
+
+    for goals in range(6):
+        mask = df["ft_home"].values == goals
+        axes[0].scatter(df["x"].values[mask], df["y"].values[mask], 
+            facecolor="C"+str(goals), edgecolor="w", s=20, alpha=0.9, label=goals)
+    axes[0].set_title("ft_home")
+    axes[0].set_xlabel("x")
+    axes[0].set_ylabel("y")
+    axes[0].legend()
+
+    for goals in range(6):
+        mask = df["ft_away"].values == goals
+        axes[1].scatter(df["x"].values[mask], df["y"].values[mask], 
+            facecolor="C"+str(goals), edgecolor="w", s=20, alpha=0.9, label=goals)
+    axes[1].set_title("ft_away")
+    axes[1].set_xlabel("x")
+    axes[1].set_ylabel("y")
+    axes[1].legend()
+
+    return fig
+
+
 def plot_elbos(
     elbos: list,
+    title: str = "",
     colour: str = "C0",
     figsize: HeightAndWidth = DEFAULT_FIG_SIZE
 ) -> plt.figure:
@@ -74,6 +108,7 @@ def plot_elbos(
     
     Args:
         elbos (list) : List of ELBO values corresponding to each training iteration
+        title (str) : Plot title
         colour (str) : Colour of the curve to plot
         figsize (HeightAndWidth) : Figure size
 
@@ -84,10 +119,8 @@ def plot_elbos(
 
     # Plot ELBO's
     ax.plot(np.arange(len(elbos)), elbos, c=colour)
+    ax.set_title(title)
     ax.set_xlabel("iteration")
     ax.set_ylabel("ELBO")
     
     return fig
-
-
-
